@@ -17,13 +17,14 @@ class AdminView extends \mf\view\AbstractView {
      *  Retourne le fragment HTML de l'entête (unique pour toutes les vues)
      */ 
     public function renderHeader(){
+        $title="<h1>LeHangar - Gestion</h1>";
         print_r($_SESSION);
         if (!empty($_SESSION['user_login'])){//menu connecté
             $router = new \mf\router\Router();
             $res="<a href='".$router->urlFor('logout')."'>Logout</img></a>";
-            return $res;
+            return $title.$res;
         }
-        return "<h1>LeHangar - Gestion</h1> ";
+        return $title;
         
     }
     
@@ -79,8 +80,10 @@ class AdminView extends \mf\view\AbstractView {
            $section = $this->renderHomeProducteur();
          }if($selector == 'HomeGerant'){
            $section = $this->renderHomeGerant();
-         }if($selector == 'HomeCommandes'){
+         }if($selector == 'Commandes'){
             $section = $this->renderCommandes();
+        }if($selector == 'TableauDeBord'){
+            $section = $this->renderTableauDeBord();
         }
         return "<header>${header}</header><section>${section}</section><footer>${footer}</footer>";
     }
@@ -101,24 +104,80 @@ class AdminView extends \mf\view\AbstractView {
 
     public function renderHomeProducteur(){
         $router = new \mf\router\Router();
-        var_dump($this->data);
-        $resultat="<a>";
-        $resultat= $resultat."Producteur</div>";
+        foreach ($this->data as $usr){
+            $resultat= "<h2>Bienvenue $usr->Nom</h2>";
+            $resultat=$resultat."<article><a href=".$router->urlFor('commandes',['id_producteur'=>$usr->id]).">Mes commandes</a></article>";
+        }
+
 
         return $resultat;
     }
     public function renderHomeGerant(){
     $router = new \mf\router\Router();
-    $resultat="<div>";
-    $resultat= $resultat."GÉRANT</div>";
+        $resultat= "<h2>Bienvenue Administrateur</h2>";
+        $resultat=$resultat."<article><a href=".$router->urlFor('TableauDeBord').">Tableau de Bord</a></article>";
 
     return $resultat;
-}
+    }
+    public function renderTableauDeBord(){
+        $resultat= "<h2>Tableau de Bord</h2>";
+
+        $com=0;
+        $ca=0;
+        $user=[];
+        foreach ($this->data as $info){
+            $com++;
+            $ca = $ca + $info->Montant;
+            $user[]=$info->Mail_client;
+        }
+        $UniqueUser = array_unique($user);
+        $nbUser=count($UniqueUser);
+        $resultat=$resultat."<article><h3>$nbUser Clients</h3></article>";
+        $resultat=$resultat."<article><h3>$com Commandes</h3></article>";
+        $resultat=$resultat."<article><h3>$ca € De CA </h3></article>";
+        $resultat=$resultat."<h2>Chiffre d'affaire par Producteur</h2>";
+        $commandes = \appAdmin\model\Commande::select();
+        $lignes=$commandes->get();
+//        var_dump($lignes);
+        $producteurs = \appAdmin\model\User::where('Role', '=','Producteur');
+        $tabProducteur =$producteurs->get();
+
+        $IdProduits=[];
+
+        foreach ($tabProducteur as $value){
+            $resultat=$resultat."<h3>$value->Nom</h3>";
+            $production = \appAdmin\model\Production::where('ID_PRODUCTEUR', '=',$value->id);
+            $tabProduction =$production->get();
+            $price=0;
+            foreach ($tabProduction as $v){
+
+
+                $quantite = \appAdmin\model\Quantite::where('PRODUIT_ID', '=',$v->ID_PRODUIT);
+                $tabQuantite =$quantite->get();
+                $produit = \appAdmin\model\Produits::where('id', '=',$v->ID_PRODUIT);
+                $tabproduits =$produit->get();
+
+                foreach ($tabproduits as $p){
+                    $p->tarif_unitaire  ;
+                    foreach ($tabQuantite as $q) {
+                       $price=$price+($p->tarif_unitaire*$q->Quantite);
+                    }
+                }
+            }
+            $resultat=$resultat."<p>$price €</p>";
+
+
+
+        }
+//        print_r($tabProducteur);
+    return $resultat;
+    }
+
     public function renderCommandes(){
         $router = new \mf\router\Router();
         $resultat="<div>";
         $resultat= $resultat."Commandes</div>";
-        $resultat =$this->data->produit;
+//        $resultat =$this->data->produit;
         return $resultat;
     }
 

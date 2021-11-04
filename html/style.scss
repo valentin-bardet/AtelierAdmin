@@ -42,6 +42,13 @@ header{
     background: cadetblue;
     padding: 0 2em;
 }
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: cadetblue;
+    padding: 0 2em;
+}
 section#produit>article{
     display: grid;
     grid-template-columns : repeat(5, 1fr);
