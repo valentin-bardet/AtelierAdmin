@@ -177,8 +177,33 @@ class AdminView extends \mf\view\AbstractView {
         $router = new \mf\router\Router();
         $resultat="<div>";
         $resultat= $resultat."Commandes</div>";
-//        $resultat =$this->data->produit;
-        return $resultat;
+        $producteurs = \appAdmin\model\User::where('Role', '=','Producteur');
+        $tabProducteur =$producteurs->get();
+
+        $IdProduits=[];
+
+        foreach ($tabProducteur as $value){
+            $resultat=$resultat."<h3>$value->Nom</h3><div id=''>";
+            $production = \appAdmin\model\Production::where('ID_PRODUCTEUR', '=',$value->id);
+            $tabProduction =$production->get();
+            $price=0;
+            foreach ($tabProduction as $v){
+
+
+                $quantite = \appAdmin\model\Quantite::where('PRODUIT_ID', '=',$v->ID_PRODUIT);
+                $tabQuantite =$quantite->get();
+                $produit = \appAdmin\model\Produits::where('id', '=',$v->ID_PRODUIT);
+                $tabproduits =$produit->get();
+
+                foreach ($tabproduits as $p){
+                    $p->tarif_unitaire  ;
+                    foreach ($tabQuantite as $q) {
+                        $price=$price+($p->tarif_unitaire*$q->Quantite);
+                    }
+                }
+            }
+            $resultat=$resultat."<p>$price €</p></div>";
+
     }
 
 
