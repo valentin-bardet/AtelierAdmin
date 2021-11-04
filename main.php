@@ -22,15 +22,8 @@ $loader->register();
 mf\view\AbstractView::addStyleSheet('html/style.css');
 $router = new \mf\router\Router();
 
-////////////////////////////application client///////////////////////////////////
+////////////////////////////application Admin///////////////////////////////////
 
-$router->addRoute('categorie',
-    '/categorie/',
-    '\appClient\control\clientController',
-    'viewCategorie',
-    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_NONE);
-$router->addRoute('produits','/produits/','\appClient\control\clientController','viewProduit',
-    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_NONE);
 $router->addRoute('login','/login/','\appAdmin\control\AdminController','viewLogin',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_NONE);
 $router->addRoute('checklogin',
@@ -60,6 +53,12 @@ $router->addRoute('logout',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
 $router->addRoute('commandes','/commandes/','\appAdmin\control\AdminController','viewCommandes',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
-$router->addRoute('user','/user/','\appClient\control\clientController','viewUser',\appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_NONE);
-$router->setDefaultRoute('/categorie/');
+if($_SESSION['access_level']==2){
+    $router->setDefaultRoute('/homeGerant/');
+}if($_SESSION['access_level']==1){
+    $router->setDefaultRoute('/homeProducteur/');
+}if($_SESSION['access_level'] < 1){
+    $router->setDefaultRoute('/login/');
+}
+
 $router->run();
