@@ -20,8 +20,14 @@ class AdminView extends \mf\view\AbstractView {
         $title="<h1>LeHangar - Gestion</h1>";
         print_r($_SESSION);
         if (!empty($_SESSION['user_login'])){//menu connecté
+
             $router = new \mf\router\Router();
-            $res="<a href='".$router->urlFor('logout')."'>Logout</img></a>";
+            $res="<nav><a href='".$router->urlFor('logout')."'><img src='https://valentinbardet.fr/atelier/html/icons/logout.png'></img></a>";
+            if($_SESSION['access_level']==1){
+                $res=$res."<a href='".$router->urlFor('homeProducteur')."'><img src='https://valentinbardet.fr/atelier/html/icons/home.png'></img></a></nav>";
+            }if($_SESSION['access_level']==2){
+                $res=$res."<a href='".$router->urlFor('homeGerant')."'><img src='https://valentinbardet.fr/atelier/html/icons/home.png'></img></a></nav>";
+            }
             return $title.$res;
         }
         return $title;
