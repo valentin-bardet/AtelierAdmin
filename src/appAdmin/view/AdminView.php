@@ -160,7 +160,7 @@ class AdminView extends \mf\view\AbstractView {
                 foreach ($tabproduits as $p){
                     $p->tarif_unitaire  ;
                     foreach ($tabQuantite as $q) {
-                       $price=$price+($p->tarif_unitaire*$q->Quantite);
+                        $price=$price+($p->tarif_unitaire*$q->Quantite);
                     }
                 }
             }
