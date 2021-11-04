@@ -21,19 +21,6 @@
     grid-auto-flow: row;  
     grid-gap: 10px;
 }
-section#categorie>article>a>img{
-    width: 100%;
-    height: 100%;
-}
-
-a:link{
-  text-decoration: none;
-}
-section#produit>article>img{
-    grid-column: 1/3 ;
-    grid-row: 1/2;
-    height: 200px;
-}
 
 header{
     display: flex;
@@ -42,188 +29,18 @@ header{
     background: cadetblue;
     padding: 0 2em;
 }
-section#produit>article{
-    display: grid;
-    grid-template-columns : repeat(5, 1fr);
-    grid-template-rows: auto;  
-    grid-auto-flow: row;  
-    border: 1px solid black;
-    padding: auto;
-    margin: auto;
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: cadetblue;
+    padding: 0 2em;
 }
-section#produit>article>img{
-    width:40%;
-    height: auto;
-}
-section#produit>article>div{
-    grid-column: 3/5 ;
-    grid-row: 1;
-}
-section#produit>article>span{
-    grid-column: 5/6 ;
-    grid-row: 1;
-}
-section#produit>article>input{
-    grid-column: 4/5 ;
-    grid-row: 2;
-}
-section#produit>article>button{
-    grid-column: 5/6 ;
-    grid-row: 2;
-}
-@media screen and (min-width:1000px) {
-    section#categorie{
-        @include grid_l;
-    }
-    .centered {
-        position: relative;
-        top: -80%;
-        left: 10%;
-        color: brown;
-        font-size: 30px;
-        font-weight: bold;
-      }
-    section#categorie article{
-        
-        box-sizing: border-box;
-        border: 1px solid black;
-        height: auto;
 
-    }
-    section#categorie article:first-child{
-        grid-column: 1/2;
-        grid-row: 1;
-    }
-    section#categorie article:nth-child(2){
-        grid-column: 2/3;
-        grid-row: 1;
-    }
-    section#categorie article:nth-child(3){
-        grid-column: 3/4;
-        grid-row: 1;
-    }
-    section#categorie article:nth-child(4){
-        grid-column: 4/5;
-        grid-row: 1;
-    }
-    section#categorie article:nth-child(5){
-        grid-column: 1/2;
-        grid-row: 2;
-    }
-    section#categorie article:nth-child(6){
-        grid-column: 2/3;
-        grid-row: 2;
-    }
-    section#categorie article:nth-child(7){
-        grid-column: 3/4;
-        grid-row: 2;
-    }
-    section#categorie article:nth-child(8){
-        grid-column: 4/5;
-        grid-row: 2;
-    }
+@media screen and (min-width:1000px) {
 
 }
 @media screen and (min-width:600px) and (max-width:999px) {
-    section#categorie{
-        @include grid_m;
-    }
-    .centered {
-        position: relative;
-        top: -80%;
-        left: 10%;
-        color: brown;
-        font-size: 30px;
-        font-weight: bold;
-      }
-
-    section#categorie article{
-        box-sizing: border-box;
-        border: 1px solid black;
-        height: auto;
-
-    }
-    section#categorie article:first-child{
-        grid-column: 1/2;
-        grid-row: 1;
-    }
-    section#categorie article:nth-child(2){
-        grid-column: 2/3;
-        grid-row: 1;
-    }
-    section#categorie article:nth-child(3){
-        grid-column: 3/4;
-        grid-row: 1;
-    }
-    section#categorie article:nth-child(4){
-        grid-column: 1/2;
-        grid-row: 2;
-    }
-    section#categorie article:nth-child(5){
-        grid-column: 2/3;
-        grid-row: 2;
-    }
-    section#categorie article:nth-child(6){
-        grid-column: 3/4;
-        grid-row: 2;
-    }
-    section#categorie article:nth-child(7){
-        grid-column: 1/2;
-        grid-row: 3;
-    }
-    section#categorie article:nth-child(8){
-        grid-column: 2/3;
-        grid-row: 3;
-    }
 }
 @media screen and (max-width:599px){
-    section#categorie{
-        @include grid_s;
-    }
-    .centered {
-        position: relative;
-        top: -80%;
-        left: 10%;
-        color: brown;
-        font-size: 30px;
-        font-weight: bold;
-      }
-    section#categorie article{
-        box-sizing: border-box;
-        border: 1px solid black;
-        height: auto;
-
-    }
-    section#categorie article:first-child{
-        grid-column: 1/2;
-        grid-row: 1;
-    }
-    section#categorie article:nth-child(2){
-        grid-column: 2/3;
-        grid-row: 1;
-    }
-    section#categorie article:nth-child(3){
-        grid-column: 1/2;
-        grid-row: 2;
-    }
-    section#categorie article:nth-child(4){
-        grid-column: 2/3;
-        grid-row: 2;
-    }
-    section#categorie article:nth-child(5){
-        grid-column: 1/2;
-        grid-row: 3;
-    }
-    section#categorie article:nth-child(6){
-        grid-column: 2/3;
-        grid-row: 3;
-    }
-    section#categorie article:nth-child(7){
-        grid-column: 1/2;
-        grid-row: 4;
-    }
-    section#categorie article:nth-child(8){
-        grid-column: 2/3;
-        grid-row: 4;
-    }
 }

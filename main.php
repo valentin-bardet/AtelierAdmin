@@ -43,6 +43,16 @@ $router->addRoute('homeProducteur',
     '\appAdmin\control\AdminController',
     'viewProducteurHome',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
+$router->addRoute('homeGerant',
+    '/homeGerant/',
+    '\appAdmin\control\AdminController',
+    'viewGerantHome',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_ADMIN);
+$router->addRoute('TableauDeBord',
+    '/TableauDeBord/',
+    '\appAdmin\control\AdminController',
+    'viewTableauDeBord',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_ADMIN);
 $router->addRoute('logout',
     '/logout/',
     '\appAdmin\control\AdminController',
