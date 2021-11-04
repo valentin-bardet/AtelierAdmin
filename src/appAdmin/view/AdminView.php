@@ -145,7 +145,7 @@ class AdminView extends \mf\view\AbstractView {
         $IdProduits=[];
 
         foreach ($tabProducteur as $value){
-            $resultat=$resultat."<h3>$value->Nom</h3>";
+            $resultat=$resultat."<h3>$value->Nom</h3><div id=''>";
             $production = \appAdmin\model\Production::where('ID_PRODUCTEUR', '=',$value->id);
             $tabProduction =$production->get();
             $price=0;
@@ -164,7 +164,7 @@ class AdminView extends \mf\view\AbstractView {
                     }
                 }
             }
-            $resultat=$resultat."<p>$price €</p>";
+            $resultat=$resultat."<p>$price €</p></div>";
 
 
 
