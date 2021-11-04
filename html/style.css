@@ -14,4 +14,26 @@ footer {
   padding: 0 2em;
 }
 
+#tableauBordInfo {
+  display: flex;
+  width: 80%;
+  margin: auto;
+  justify-content: space-evenly;
+}
+#tableauBordInfo article {
+  text-align: center;
+}
+
+#Producteurs_CA {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+#Producteurs_CA article {
+  text-align: center;
+}
+#Producteurs_CA article img {
+  width: 150px;
+}
+
 /*# sourceMappingURL=style.css.map */

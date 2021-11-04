@@ -36,6 +36,27 @@ footer{
     background: cadetblue;
     padding: 0 2em;
 }
+#tableauBordInfo{
+    display: flex;
+    width: 80%;
+    margin: auto;
+    justify-content: space-evenly;
+    article{
+        text-align: center;
+    }
+
+}
+#Producteurs_CA{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    article{
+    text-align: center;
+        img{
+            width: 150px;
+        }
+    }
+}
 
 @media screen and (min-width:1000px) {
 
