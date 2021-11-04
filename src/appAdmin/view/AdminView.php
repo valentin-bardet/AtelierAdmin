@@ -65,6 +65,8 @@ class AdminView extends \mf\view\AbstractView {
             $section = $this->renderCommandes();
         }if($selector == 'TableauDeBord'){
             $section = $this->renderTableauDeBord();
+        }if($selector == 'AllCommandes'){
+            $section = $this->renderAllCommandes();
         }
         return "<header>${header}</header><section>${section}</section><footer>${footer}</footer>";
     }
@@ -96,9 +98,61 @@ class AdminView extends \mf\view\AbstractView {
     public function renderHomeGerant(){
     $router = new \mf\router\Router();
         $resultat= "<h2>Bienvenue Administrateur</h2>";
-        $resultat=$resultat."<article><a href=".$router->urlFor('TableauDeBord').">Tableau de Bord</a></article>";
+        $resultat=$resultat."<main><article><a href=".$router->urlFor('AllCommandes').">Commandes</a></article>";
+        $resultat=$resultat."<article><a href=".$router->urlFor('TableauDeBord').">Tableau de Bord</a></article></main>";
 
     return $resultat;
+    }
+
+    public function renderAllCommandes(){
+    $router = new \mf\router\Router();
+        $resultat= "<h2>Gestion des Commandes</h2>";
+        $nbCommandes=0;
+        foreach ($this->data as $prop){
+            $nbCommandes++;
+        }
+        $resultat=$resultat."<div id='ALlCommandes'><aside><h3>$nbCommandes Commandes</h3><form><input type='text'></form></aside>";
+
+        foreach ($this->data as $prop){
+
+            if($prop->Etat == 'livré'){$livre = "Livré";$paye="Non-Payé";
+                $commande= \appAdmin\model\Quantite::where('COMMANDE_ID', '=',$prop->id);
+                $lines=$commande->get();
+                $nbArticles=0;
+                foreach ($lines as $q){
+                    $nbArticles=$nbArticles + $q->Quantite;
+                }
+            $resultat=$resultat."<a href=".$router->urlFor('commandes',['id_Commande'=>$prop->id])."><article><p>$prop->Nom_client</p><p>$prop->Tel_client</p><p>$nbArticles Article(s)</p><p>$livre</p><p>$prop->Montant €</p><p class='error'>$paye</p></article></a>"."\n";
+            }
+        }
+        foreach ($this->data as $prop){
+            if($prop->Etat == 'en_cours'){
+                $livre = "Non-Livré";$paye="Non-Payé";
+                $commande= \appAdmin\model\Quantite::where('COMMANDE_ID', '=',$prop->id);
+                $lines=$commande->get();
+                $nbArticles=0;
+                foreach ($lines as $q){
+                    $nbArticles=$nbArticles + $q->Quantite;
+                }
+                $resultat=$resultat."<a href=".$router->urlFor('commandes',['id_Commande'=>$prop->id])."><article><p>$prop->Nom_client</p><p>$prop->Tel_client</p><p>$nbArticles Article(s)</p><p class='error'>$livre</p><p>$prop->Montant €</p><p class='error'>$paye</p></article></a>"."\n";
+            }
+        }
+        foreach ($this->data as $prop){
+            if($prop->Etat == 'payé'){
+                $livre = "Livré";$paye="Payé";
+                $commande= \appAdmin\model\Quantite::where('COMMANDE_ID', '=',$prop->id);
+                $lines=$commande->get();
+                $nbArticles=0;
+                foreach ($lines as $q){
+                    $nbArticles=$nbArticles + $q->Quantite;
+                }
+                $resultat=$resultat."<a href=".$router->urlFor('commandes',['id_Commande'=>$prop->id])."><article><p>$prop->Nom_client</p><p>$prop->Tel_client</p><p>$nbArticles Article(s)</p><p>$livre</p><p>$prop->Montant €</p><p>$paye</p></article></a>"."\n";
+            }
+        }
+
+
+
+    return $resultat."</div>";
     }
     public function renderTableauDeBord(){
         $resultat= "<h2>Tableau de Bord</h2>";
@@ -119,7 +173,6 @@ class AdminView extends \mf\view\AbstractView {
         $resultat=$resultat."<h2>Chiffre d'affaire par Producteur</h2>";
         $commandes = \appAdmin\model\Commande::select();
         $lignes=$commandes->get();
-//        var_dump($lignes);
         $producteurs = \appAdmin\model\User::where('Role', '=','Producteur');
         $tabProducteur =$producteurs->get();
 

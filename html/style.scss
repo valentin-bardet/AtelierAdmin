@@ -1,26 +1,4 @@
-
-
-@mixin grid_l{
-    display: grid;
-    grid-template-columns : repeat(4, 1fr);
-    grid-template-rows: auto;  
-    grid-auto-flow: row;  
-    grid-gap: 10px;
-}
-@mixin grid_m{
-    display: grid;
-    grid-template-columns : repeat(3, 1fr);
-    grid-template-rows: auto;  
-    grid-auto-flow: row;  
-    grid-gap: 10px;
-}
-@mixin grid_s{
-    display: grid;
-    grid-template-columns : repeat(2, 1fr);
-    grid-template-rows: auto;  
-    grid-auto-flow: row;  
-    grid-gap: 10px;
-}
+@use "reset";
 
 header{
     display: flex;
@@ -28,34 +6,87 @@ header{
     align-items: center;
     background: cadetblue;
     padding: 0 2em;
+    nav{
+        padding: 1em;
+    }
+}
+section{
+    height: 87vh;
+
+    main{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        article{
+            flex-basis: 150px;
+            height: 150px;
+            background-color: cadetblue;
+            display: flex;
+            justify-content: Center;
+            align-items: center;
+            margin: 0 4em;
+            a{
+                width: 100%;
+                height: 100%;
+                display: block;
+                text-align: center;
+                line-height: 150px;
+            }&:hover{
+            background: aqua;
+                         }
+        }
+    }
+    #tableauBordInfo{
+        display: flex;
+        width: 80%;
+        margin: auto;
+        justify-content: space-evenly;
+        article{
+            text-align: center;
+        }
+
+    }
+    #Producteurs_CA{
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+        article{
+            text-align: center;
+            img{
+                width: 150px;
+            }
+        }
+    }
+    #ALlCommandes{
+        padding: 0 2em;
+        aside{
+            margin-bottom: 1.5em;
+            display: flex;
+            justify-content: space-between;
+        }
+        article{
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            padding: 1em 0 ;
+            border: solid 2px cadetblue;
+            border-radius: 5px;
+            margin-bottom: 2em;
+            text-align: center;
+            .error{
+                color: firebrick;
+                font-weight: bolder;
+            }
+        }
+
+    }
 }
 footer{
     display: flex;
     justify-content: center;
     align-items: center;
     background: cadetblue;
-    padding: 0 2em;
-}
-#tableauBordInfo{
-    display: flex;
-    width: 80%;
-    margin: auto;
-    justify-content: space-evenly;
-    article{
-        text-align: center;
-    }
-
-}
-#Producteurs_CA{
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
-    article{
-    text-align: center;
-        img{
-            width: 150px;
-        }
-    }
+    padding: 1em;
 }
 
 @media screen and (min-width:1000px) {

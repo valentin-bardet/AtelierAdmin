@@ -1,3 +1,71 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+h1, h2, h3 {
+  font-weight: bold;
+}
+
+h2 {
+  font-size: large;
+  margin: 2em;
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -5,35 +73,86 @@ header {
   background: cadetblue;
   padding: 0 2em;
 }
+header nav {
+  padding: 1em;
+}
+
+section {
+  height: 87vh;
+}
+section main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+section main article {
+  flex-basis: 150px;
+  height: 150px;
+  background-color: cadetblue;
+  display: flex;
+  justify-content: Center;
+  align-items: center;
+  margin: 0 4em;
+}
+section main article a {
+  width: 100%;
+  height: 100%;
+  display: block;
+  text-align: center;
+  line-height: 150px;
+}
+section main article:hover {
+  background: aqua;
+}
+section #tableauBordInfo {
+  display: flex;
+  width: 80%;
+  margin: auto;
+  justify-content: space-evenly;
+}
+section #tableauBordInfo article {
+  text-align: center;
+}
+section #Producteurs_CA {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+section #Producteurs_CA article {
+  text-align: center;
+}
+section #Producteurs_CA article img {
+  width: 150px;
+}
+section #ALlCommandes {
+  padding: 0 2em;
+}
+section #ALlCommandes aside {
+  margin-bottom: 1.5em;
+  display: flex;
+  justify-content: space-between;
+}
+section #ALlCommandes article {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding: 1em 0;
+  border: solid 2px cadetblue;
+  border-radius: 5px;
+  margin-bottom: 2em;
+  text-align: center;
+}
+section #ALlCommandes article .error {
+  color: firebrick;
+  font-weight: bolder;
+}
 
 footer {
   display: flex;
   justify-content: center;
   align-items: center;
   background: cadetblue;
-  padding: 0 2em;
-}
-
-#tableauBordInfo {
-  display: flex;
-  width: 80%;
-  margin: auto;
-  justify-content: space-evenly;
-}
-#tableauBordInfo article {
-  text-align: center;
-}
-
-#Producteurs_CA {
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-}
-#Producteurs_CA article {
-  text-align: center;
-}
-#Producteurs_CA article img {
-  width: 150px;
+  padding: 1em;
 }
 
 /*# sourceMappingURL=style.css.map */

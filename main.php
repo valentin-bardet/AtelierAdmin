@@ -24,7 +24,10 @@ $router = new \mf\router\Router();
 
 ////////////////////////////application Admin///////////////////////////////////
 
-$router->addRoute('login','/login/','\appAdmin\control\AdminController','viewLogin',
+$router->addRoute('login',
+    '/login/',
+    '\appAdmin\control\AdminController',
+    'viewLogin',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_NONE);
 $router->addRoute('checklogin',
     '/checklogin/',
@@ -46,13 +49,23 @@ $router->addRoute('TableauDeBord',
     '\appAdmin\control\AdminController',
     'viewTableauDeBord',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_ADMIN);
+$router->addRoute('AllCommandes',
+    '/AllCommandes/',
+    '\appAdmin\control\AdminController',
+    'viewAllCommandes',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_ADMIN);
 $router->addRoute('logout',
     '/logout/',
     '\appAdmin\control\AdminController',
     'log_out',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
-$router->addRoute('commandes','/commandes/','\appAdmin\control\AdminController','viewCommandes',
+$router->addRoute('commandes',
+    '/commandes/',
+    '\appAdmin\control\AdminController',
+    'viewCommandes',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
+
+
 if($_SESSION['access_level']==2){
     $router->setDefaultRoute('/homeGerant/');
 }if($_SESSION['access_level']==1){

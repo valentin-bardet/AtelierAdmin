@@ -22,6 +22,12 @@ class AdminController extends \mf\control\AbstractController {
         $vue= new \appAdmin\view\AdminView(null);
         return $vue->render('HomeGerant');
     }
+    public function viewAllCommandes(){
+        $commandes = \appAdmin\model\Commande::select();
+        $lignes = $commandes->get();
+        $vue= new \appAdmin\view\AdminView($lignes);
+        return $vue->render('AllCommandes');
+    }
     public function viewTableauDeBord(){
         $commandes = \appAdmin\model\Commande::select();
         $lignes=$commandes->get();
