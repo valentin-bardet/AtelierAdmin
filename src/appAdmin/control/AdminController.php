@@ -74,10 +74,7 @@ class AdminController extends \mf\control\AbstractController {
     }
 
     public function viewCommandes(){
-        $categorie = \appAdmin\model\Commandes::select();
-        $lignes= $categorie->get();
-        $vues=new \appAdmin\view\AdminView($lignes);
-        print_r($lignes);
+        $vues=new \appAdmin\view\AdminView(null);
         return $vues->render('Commandes');
 
     }

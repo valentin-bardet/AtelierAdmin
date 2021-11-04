@@ -177,37 +177,43 @@ class AdminView extends \mf\view\AbstractView {
     {
         $router = new \mf\router\Router();
         $resultat = "<div>";
+        // print_r($_SESSION);
         $resultat = $resultat . "Commandes</div>";
-        $producteurs = \appAdmin\model\User::where('Role', '=', 'Producteur');
-        $tabProducteur = $producteurs->get();
+        $producteurs = \appAdmin\model\User::where('Mail', '=',$_SESSION['user_login']);
+        $producteur = $producteurs->first();
+        // print_r($producteur);
+        $producteur_id = $producteur->id;
+        $produits =  \appAdmin\model\Production::where('ID_PRODUCTEUR', '=',$producteur_id);
+        $produit = $produits->get();
+        $prixtotal = 0;
+        $resultat="<section id='commande'>";
+        foreach($produit as $prod){
+            $id_produit = \appAdmin\model\Produits::where('id', '=',$prod->ID_PRODUIT);
+            $idprod = $id_produit->first();
+            $resultat="$resultat"."<p>$idprod->nom</p>";
+            // QUANTITE
+            $tarifuni = $idprod->tarif_unitaire;
+            $quantites =  \appAdmin\model\Quantite::where('PRODUIT_ID', '=',$idprod->id);
+            $idquantite =$quantites->get();
+            // Prix
+            foreach($idquantite as $quant){
+                $nombre=$quant->Quantite;
+                $montantcumulprod= $tarifuni*$nombre;
+                $resultat="$resultat"."<p>x$nombre</p>";
+                $resultat="$resultat"."<p>$montantcumulprod</p>";
+            }
 
-        $IdProduits = [];
-
-        foreach ($tabProducteur as $value) {
-            $resultat = $resultat . "<h3>$value->Nom</h3><div id=''>";
-            /* $production = \appAdmin\model\Production::where('ID_PRODUCTEUR', '=',$value->id);
-             $tabProduction =$production->get();
-             $price=0;
-             foreach ($tabProduction as $v){
-
-
-                 $quantite = \appAdmin\model\Quantite::where('PRODUIT_ID', '=',$v->ID_PRODUIT);
-                 $tabQuantite =$quantite->get();
-                 $produit = \appAdmin\model\Produits::where('id', '=',$v->ID_PRODUIT);
-                 $tabproduits =$produit->get();
-
-                 foreach ($tabproduits as $p){
-                     $p->tarif_unitaire  ;
-                     foreach ($tabQuantite as $q) {
-                         $price=$price+($p->tarif_unitaire*$q->Quantite);
-                     }
-                 }
-             }
-             $resultat=$resultat."<p>$price €</p></div>";
-
-           */
+            $prixtotal = $prixtotal+$montantcumulprod;
 
         }
+        $producteur_id = $producteur->id;
+        $produits =  \appAdmin\model\Production::where('ID_PRODUCTEUR', '=',$producteur_id);
+        $produit = $produits->get();
+        $resultat="$resultat"."<p>Le prix total est de : $prixtotal</p></section>";
+        return "$resultat";
+
+
+
     }
 
 
