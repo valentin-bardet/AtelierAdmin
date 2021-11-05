@@ -79,6 +79,16 @@ $router->addRoute('ValidmodifProduit',
     '\appAdmin\control\AdminController',
     'ValidmodifProduit',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
+$router->addRoute('NewProduit',
+    '/NewProduit/',
+    '\appAdmin\control\AdminController',
+    'ViewNewProduit',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
+$router->addRoute('ValidNewProduit',
+    '/ValidNewProduit/',
+    '\appAdmin\control\AdminController',
+    'ValidNewProduit',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
 $router->addRoute('logout',
     '/logout/',
     '\appAdmin\control\AdminController',

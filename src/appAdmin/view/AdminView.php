@@ -73,6 +73,8 @@ class AdminView extends \mf\view\AbstractView {
             $section = $this->renderMesProduits();
         }if($selector == 'modifProduit'){
             $section = $this->rendermodifProduit();
+        }if($selector == 'NewProduit'){
+            $section = $this->renderNewProduit();
         }
         return "<header>${header}</header><section>${section}</section><footer>${footer}</footer>";
     }
@@ -158,17 +160,35 @@ class AdminView extends \mf\view\AbstractView {
         }
         $resultat=$resultat."</select>
         <button type='submit'>Valider la modification</button></article>
-        </form><svg style='visibility: hidden; position: absolute;' width='0' height='0' xmlns='http://www.w3.org/2000/svg' version='1.1'>
-                    <defs>
-                        <filter id='goo'><feGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur' />    
-                            <feColorMatrix in='blur' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' />
-                            <feComposite in='SourceGraphic' in2='goo' operator='atop'/>
-                        </filter>
-                    </defs>
-                </svg>";
+        </form>";
         }
 
 
+        return $resultat."</div>";
+    }
+    public function renderNewProduit(){
+        $router = new \mf\router\Router();
+
+        foreach ($this->data as $user){
+            $resultat= "<h2>Ajouter un produit</h2><div id='MesProduits'>";
+            $resultat=$resultat."<form method='post' action=".$router->urlFor('ValidNewProduit').">
+        <aside><label for='nom'>Nom</label><label for='prix'>Prix</label><label for='description'>Description</label><label for='quantite'>Quantité</label><label for='categorie'>Catégorie</label></aside>
+        <article>
+        <input type='hidden' name='id' id='id' value='$user->id'>
+        <input type='text' name='nom' id='nom'>
+        <input type='text' name='prix' id='prix'>
+        <textarea type='text' rows='3' name='description' id='description'></textarea>
+        <input type='text' name='quantite' id='quantite'>
+        <select name='categorie' id='categorie'>";
+        $categories = \appAdmin\model\Categorie::select();
+        $categoriesL=$categories->get();
+        foreach ($categoriesL as $res){
+                $resultat=$resultat."<option value='$res->id'>$res->Nom</option>";
+        }
+        $resultat=$resultat."</select>
+        <button type='submit'>Créer le produit</button></article>
+        </form>";
+        }
         return $resultat."</div>";
     }
     public function renderHomeGerant(){
@@ -357,12 +377,50 @@ class AdminView extends \mf\view\AbstractView {
     return $resultat."</div>";
     }
 
-    public function renderCommandes(){
+    public function renderCommandes()
+    {
         $router = new \mf\router\Router();
-        $resultat="<div>";
-        $resultat= $resultat."Commandes</div>";
-        return $resultat;
+        $resultat = "<h2>Mes Commandes</h2><div id='commande_produ'>";
+        // print_r($_SESSION);
+        $resultat = $resultat . "<p>Nom</p> ";
+        $resultat = $resultat . "<p>Quantité total</p>";
+        $resultat = $resultat . "<p>Prix</p></div>";
+        $producteurs = \appAdmin\model\User::where('Mail', '=',$_SESSION['user_login']);
+        $producteur = $producteurs->first();
+        // print_r($producteur);
+        $producteur_id = $producteur->id;
+        $produits =  \appAdmin\model\Production::where('ID_PRODUCTEUR', '=',$producteur_id);
+        $produit = $produits->get();
+        $totalmoney=0;
+        $totalquantite=0;
+        $resultat=$resultat."<section id='commande_producteur'>";
+        foreach($produit as $prod){
+            $quantites =  \appAdmin\model\Quantite::where('PRODUIT_ID', '=',$prod->ID_PRODUIT);
+            $idquantite =$quantites->get();
+            foreach ($idquantite as $a){
+                $id_produit = \appAdmin\model\Produits::where('id', '=',$prod->ID_PRODUIT);
+                $idprod = $id_produit->first();
+                $money=$idprod->tarif_unitaire*$a->Quantite;
+                $totalmoney+=$money;
+                $totalquantite+=$a->Quantite;
+                $resultat="$resultat"."<article><p>$idprod->nom</p><p>X$a->Quantite</p><p>$money €</p></article>";
+            }
+
+
+
+
+        }
+
+        $producteur_id = $producteur->id;
+        $produits =  \appAdmin\model\Production::where('ID_PRODUCTEUR', '=',$producteur_id);
+        $produit = $produits->get();
+        $resultat="$resultat"."<article id='total_prix_quantite'>"."<p>Total : </p>"."<p>X$totalquantite</p>"."<p>"."$totalmoney €</p></article>";
+
+        return "$resultat";
+
+
     }
+
 
 
 }

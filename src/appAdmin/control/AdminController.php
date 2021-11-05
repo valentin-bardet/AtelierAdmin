@@ -64,8 +64,9 @@ class AdminController extends \mf\control\AbstractController {
     }
 
     public function viewCommandes(){
-        $vue= new \appAdmin\view\AdminView(null);
-        return $vue->render('Commandes');
+        $vues=new \appAdmin\view\AdminView(null);
+        return $vues->render('Commandes');
+
     }
     public function ValidLivraison(){
         $commandeID=$_GET['id'];
@@ -82,6 +83,35 @@ class AdminController extends \mf\control\AbstractController {
         $Commande->save();
         $router = new \mf\router\Router();
         header("Location: ".$router->urlFor('HomeGerant'));
+    }
+    public function ViewNewProduit(){
+    $usermail=$_SESSION['user_login'];
+    $user=\appAdmin\model\User::where('Mail','=',$usermail);
+    $userL=$user->get();
+    $vue= new \appAdmin\view\AdminView($userL);
+    return $vue->render('NewProduit');
+    }
+    public function ValidNewProduit(){
+        $userID=$_POST['id'];
+        $produitNom=$_POST['nom'];
+        $produitPrix=$_POST['prix'];
+        $produitDesc=$_POST['description'];
+        $produitQuantite=$_POST['quantite'];
+        $produitCategorie=$_POST['categorie'];
+        $newProduct = new \appAdmin\model\Produits();
+        $newProduct->nom=$produitNom;
+        $newProduct->description=$produitDesc;
+        $newProduct->Quantite=$produitQuantite;
+        $newProduct->tarif_unitaire=$produitPrix;
+        $newProduct->ID_categorie=$produitCategorie;
+        $newProduct->Image='../../html/img/default.png';
+        $newProduct->save();
+        $production= new \appAdmin\model\Production();
+        $production->ID_PRODUCTEUR=$userID;
+        $production->ID_PRODUIT=$newProduct->id;
+        $production->save();
+        $router = new \mf\router\Router();
+        header("Location: ".$router->urlFor('MesProduits'));
     }
     public function modifProduit(){
         $produitID=$_GET['id'];
