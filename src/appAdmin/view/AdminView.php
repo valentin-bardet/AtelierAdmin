@@ -207,7 +207,7 @@ class AdminView extends \mf\view\AbstractView {
         foreach ($this->data as $prop){
             $nbCommandes++;
         }
-        $resultat=$resultat."<div id='ALlCommandes'><aside><h3>$nbCommandes Commandes</h3><form><input type='text'></form></aside>";
+        $resultat=$resultat."<div id='ALlCommandes'><aside><h3>$nbCommandes Commandes</h3></aside>";
 
         foreach ($this->data as $prop){
 

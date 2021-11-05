@@ -60,7 +60,8 @@ class AdminController extends \mf\control\AbstractController {
     public function log_out(){
         $auth=new  \mf\auth\Authentification;
         $auth->logout();
-        \mf\router\Router::executeRoute('login');
+        $router = new \mf\router\Router();
+        $router->executeRoute('login');
     }
 
     public function viewCommandes(){
@@ -75,6 +76,7 @@ class AdminController extends \mf\control\AbstractController {
         $Commande->Etat ='livré';
         $Commande->save();
         $router = new \mf\router\Router();
+//        $router->executeRoute('HomeGerant');
         header("Location: ".$router->urlFor('HomeGerant'));
     }
     public function ValidPaiement(){
@@ -83,6 +85,7 @@ class AdminController extends \mf\control\AbstractController {
         $Commande->Etat ='payé';
         $Commande->save();
         $router = new \mf\router\Router();
+//        $router->executeRoute('HomeGerant');
         header("Location: ".$router->urlFor('HomeGerant'));
     }
     public function ViewNewProduit(){
@@ -113,7 +116,7 @@ class AdminController extends \mf\control\AbstractController {
         $production->ID_PRODUIT=$newProduct->id;
         $production->save();
         $router = new \mf\router\Router();
-        header("Location: ".$router->urlFor('MesProduits'));
+        $router->executeRoute('MesProduits');
     }
     public function modifProduit(){
         $produitID=$_GET['id'];
@@ -138,7 +141,7 @@ class AdminController extends \mf\control\AbstractController {
         $produit->Quantite=$produitQuantite;
         $produit->save();
         $router = new \mf\router\Router();
-        header("Location: ".$router->urlFor('MesProduits'));
+        $router->executeRoute('MesProduits');
     }
     public function viewMesProduits(){
         $mail=$_SESSION['user_login'];
