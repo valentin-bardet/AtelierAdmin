@@ -176,9 +176,11 @@ class AdminView extends \mf\view\AbstractView {
     public function renderCommandes()
     {
         $router = new \mf\router\Router();
-        $resultat = "<div>";
+        $resultat = "<div id='commande_produ'>";
         // print_r($_SESSION);
-        $resultat = $resultat . "Commandes</div>";
+        $resultat = $resultat . "<p>Mes Commandes </p> ";
+        $resultat = $resultat . "<p>Quantité total </p>";
+        $resultat = $resultat . "<p>Prix </p></div>";
         $producteurs = \appAdmin\model\User::where('Mail', '=',$_SESSION['user_login']);
         $producteur = $producteurs->first();
         // print_r($producteur);
@@ -186,8 +188,10 @@ class AdminView extends \mf\view\AbstractView {
         $produits =  \appAdmin\model\Production::where('ID_PRODUCTEUR', '=',$producteur_id);
         $produit = $produits->get();
         $prixtotal = 0;
-        $resultat="<section id='commande'>";
+        $totalquantite=0;
+        $resultat=$resultat."<section id='commande_producteur'>";
         foreach($produit as $prod){
+            $resultat=$resultat."<article>";
             $id_produit = \appAdmin\model\Produits::where('id', '=',$prod->ID_PRODUIT);
             $idprod = $id_produit->first();
             $resultat="$resultat"."<p>$idprod->nom</p>";
@@ -195,23 +199,29 @@ class AdminView extends \mf\view\AbstractView {
             $tarifuni = $idprod->tarif_unitaire;
             $quantites =  \appAdmin\model\Quantite::where('PRODUIT_ID', '=',$idprod->id);
             $idquantite =$quantites->get();
+
             // Prix
             foreach($idquantite as $quant){
                 $nombre=$quant->Quantite;
                 $montantcumulprod= $tarifuni*$nombre;
-                $resultat="$resultat"."<p>x$nombre</p>";
+                $totalquantite=$totalquantite+$nombre;
+
+                $resultat="$resultat"."<p>X$nombre</p>";
                 $resultat="$resultat"."<p>$montantcumulprod</p>";
             }
 
             $prixtotal = $prixtotal+$montantcumulprod;
 
+
+            $resultat=$resultat."</article>";
         }
+
         $producteur_id = $producteur->id;
         $produits =  \appAdmin\model\Production::where('ID_PRODUCTEUR', '=',$producteur_id);
         $produit = $produits->get();
-        $resultat="$resultat"."<p>Le prix total est de : $prixtotal</p></section>";
-        return "$resultat";
+        $resultat="$resultat"."<article id='total_prix_quantite'>"."<p>Total : </p>"."<p>X$totalquantite</p>"."<p>"."Le prix total est de : $prixtotal</p></article>";
 
+        return "$resultat";
 
 
     }
