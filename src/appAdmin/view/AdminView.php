@@ -21,11 +21,11 @@ class AdminView extends \mf\view\AbstractView {
         if (!empty($_SESSION['user_login'])){//menu connecté
 
             $router = new \mf\router\Router();
-            $res="<nav><a href='".$router->urlFor('logout')."'><img src='https://149.91.80.75/atelier/html/icons/logout.png'></a>";
+            $res="<nav><a href='".$router->urlFor('logout')."'><img src='../../html/icons/logout.png'></a>";
             if($_SESSION['access_level']==1){
-                $res=$res."<a href='".$router->urlFor('homeProducteur')."'><img src='https://149.91.80.75/atelier/html/icons/home.png'></a></nav>";
+                $res=$res."<a href='".$router->urlFor('homeProducteur')."'><img src='../../html/icons/home.png'></a></nav>";
             }if($_SESSION['access_level']==2){
-                $res=$res."<a href='".$router->urlFor('homeGerant')."'><img src='https://149.91.80.75/atelier/html/icons/home.png'></a></nav>";
+                $res=$res."<a href='".$router->urlFor('homeGerant')."'><img src='../../html/icons/home.png'></a></nav>";
             }
             return $title.$res;
         }
@@ -105,7 +105,7 @@ class AdminView extends \mf\view\AbstractView {
         $router = new \mf\router\Router();
         foreach ($this->data as $usr){
             $resultat= "<h2>Bienvenue $usr->Nom</h2>";
-            $resultat=$resultat."<div class='main'><article><a href=".$router->urlFor('commandes',['id_producteur'=>$usr->id]).">Mes commandes</a></article><article><a href=".$router->urlFor('MesProduits').">Mes produits</a></article></div>";
+            $resultat=$resultat."<div class='main'><article><a href=".$router->urlFor('commandes',['id_producteur'=>$usr->id]).">Mes commandes</a></article><article><a href=".$router->urlFor('MesProduits').">Mes produits</a></article><article><a href=".$router->urlFor('NewProduit').">Nouveau produit</a></article></div>";
         }
 
 
@@ -114,7 +114,7 @@ class AdminView extends \mf\view\AbstractView {
     public function renderMesProduits(){
         $router = new \mf\router\Router();
         foreach ($this->data as $usr){
-            $resultat= "<h2>Mes Produits</h2><div id='MesProduits'>";
+            $resultat= "<h2>Mes Produits</h2><a href=".$router->urlFor('')."></a><div id='MesProduits'>";
             $production= \appAdmin\model\Production::where('ID_PRODUCTEUR','=',$usr->id);
             $ligneProduction=$production->get();
             $resultat=$resultat."<aside><h3>Nom</h3><h3>Prix</h3><h3>Description</h3><h3>Quantité</h3><h3>Catégorie</h3></aside>";
@@ -322,9 +322,9 @@ class AdminView extends \mf\view\AbstractView {
         }
         $UniqueUser = array_unique($user);
         $nbUser=count($UniqueUser);
-        $resultat=$resultat."<div id='tableauBordInfo'><article><img src='https://149.91.80.75/atelier/html/icons/customer.png' alt='Client'><h3>$nbUser Clients</h3></article>";
-        $resultat=$resultat."<article><img src='https://149.91.80.75/atelier/html/icons/orders.png' alt='Commandes'><h3>$com Commandes</h3></article>";
-        $resultat=$resultat."<article><img src='https://149.91.80.75/atelier/html/icons/money.png' alt='Money'><h3>$ca € De CA </h3></article></div>";
+        $resultat=$resultat."<div id='tableauBordInfo'><article><img src='../../html/icons/customer.png' alt='Client'><h3>$nbUser Clients</h3></article>";
+        $resultat=$resultat."<article><img src='../../html/icons/orders.png' alt='Commandes'><h3>$com Commandes</h3></article>";
+        $resultat=$resultat."<article><img src='../../html/icons/money.png' alt='Money'><h3>$ca € De CA </h3></article></div>";
         $resultat=$resultat."<h2>Chiffre d'affaire par Producteur</h2>";
         $commandes = \appAdmin\model\Commande::select();
         $lignes=$commandes->get();
