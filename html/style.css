@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap");
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
@@ -19,7 +20,6 @@ time, mark, audio, video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
 }
 
@@ -66,15 +66,19 @@ h2 {
   margin: 2em;
 }
 
+* {
+  font-family: "Roboto", sans-serif;
+}
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: cadetblue;
-  padding: 0 2em;
+  padding: 1em 2em;
 }
-header nav {
-  padding: 1em;
+header nav a {
+  margin-left: 1em;
 }
 
 section {
@@ -145,6 +149,107 @@ section #ALlCommandes article {
 section #ALlCommandes article .error {
   color: firebrick;
   font-weight: bolder;
+}
+section #Commande {
+  padding: 0 2em;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+section #Commande #Total {
+  grid-template-columns: 4fr 1fr 1fr;
+  align-items: start;
+  padding: 1em;
+}
+section #Commande #Total h3 {
+  margin-left: -1em;
+}
+section #Commande aside {
+  display: grid;
+  grid-template-columns: 4fr 1.5fr 1fr;
+  align-items: center;
+}
+section #Commande aside span {
+  line-height: 48px;
+}
+section #Commande aside span img {
+  margin-right: 1em;
+}
+section #Commande aside span:nth-child(1) {
+  font-weight: bolder;
+}
+section #Commande aside span:nth-child(2):before {
+  content: url("https://valentinbardet.fr/atelier/html/icons/email.png");
+  position: relative;
+  left: -1em;
+  top: 10px;
+}
+section #Commande aside span:nth-child(3) {
+  justify-self: end;
+}
+section #Commande aside span:nth-child(3):before {
+  content: url("https://valentinbardet.fr/atelier/html/icons/phone.png");
+  position: relative;
+  left: -1em;
+  top: 10px;
+}
+section #Commande h3 {
+  margin-top: 1em;
+}
+section #Commande article {
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr;
+  padding: 1em;
+  border: solid 2px cadetblue;
+  border-radius: 5px;
+  margin: 2em 0;
+}
+section #Commande article p:nth-child(1) {
+  text-transform: capitalize;
+}
+section #Commande #valide {
+  padding: 11rem 0;
+  filter: url("#goo");
+  margin: auto;
+}
+section #Commande #valide a {
+  display: inline-block;
+  text-align: center;
+  background: cadetblue;
+  color: white;
+  font-weight: bold;
+  padding: 1.18em 1.32em 1.03em;
+  line-height: 1;
+  border-radius: 1em;
+  position: relative;
+  min-width: 8.23em;
+  text-decoration: none;
+  font-size: 1.25rem;
+}
+section #Commande #valide a:before,
+section #Commande #valide a:after {
+  width: 4.4em;
+  height: 2.95em;
+  position: absolute;
+  content: "";
+  display: inline-block;
+  background: cadetblue;
+  border-radius: 50%;
+  transition: transform 1s ease;
+  transform: scale(0);
+  z-index: -1;
+}
+section #Commande #valide a:before {
+  top: -25%;
+  left: 20%;
+}
+section #Commande #valide a:after {
+  bottom: -25%;
+  right: 20%;
+}
+section #Commande #valide a:hover:before,
+section #Commande #valide a:hover:after {
+  transform: none;
 }
 
 footer {

@@ -54,6 +54,21 @@ $router->addRoute('AllCommandes',
     '\appAdmin\control\AdminController',
     'viewAllCommandes',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_ADMIN);
+$router->addRoute('TheCommande',
+    '/TheCommande/',
+    '\appAdmin\control\AdminController',
+    'viewTheCommande',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_ADMIN);
+$router->addRoute('ValidLivraison',
+    '/ValidLivraison/',
+    '\appAdmin\control\AdminController',
+    'ValidLivraison',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_ADMIN);
+$router->addRoute('ValidPaiement',
+    '/ValidPaiement/',
+    '\appAdmin\control\AdminController',
+    'ValidPaiement',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_ADMIN);
 $router->addRoute('logout',
     '/logout/',
     '\appAdmin\control\AdminController',

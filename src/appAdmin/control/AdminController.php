@@ -28,6 +28,13 @@ class AdminController extends \mf\control\AbstractController {
         $vue= new \appAdmin\view\AdminView($lignes);
         return $vue->render('AllCommandes');
     }
+    public function viewTheCommande(){
+        $commande_id=$_GET['id'];
+        $commande = \appAdmin\model\Commande::where('id','=',$commande_id);;
+        $lignes=$commande->get();
+        $vue= new \appAdmin\view\AdminView($lignes);
+        return $vue->render('TheCommande');
+    }
     public function viewTableauDeBord(){
         $commandes = \appAdmin\model\Commande::select();
         $lignes=$commandes->get();
@@ -52,5 +59,21 @@ class AdminController extends \mf\control\AbstractController {
     public function viewCommandes(){
         $vue= new \appAdmin\view\AdminView(null);
         return $vue->render('Commandes');
+    }
+    public function ValidLivraison(){
+        $commandeID=$_GET['id'];
+        $Commande=\appAdmin\model\Commande::where('id','=',$commandeID)->first();
+        $Commande->Etat ='livré';
+        $Commande->save();
+        $router = new \mf\router\Router();
+        header("Location: ".$router->urlFor('HomeGerant'));
+    }
+    public function ValidPaiement(){
+        $commandeID=$_GET['id'];
+        $Commande=\appAdmin\model\Commande::where('id','=',$commandeID)->first();
+        $Commande->Etat ='payé';
+        $Commande->save();
+        $router = new \mf\router\Router();
+        header("Location: ".$router->urlFor('HomeGerant'));
     }
 }

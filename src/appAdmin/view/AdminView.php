@@ -67,6 +67,8 @@ class AdminView extends \mf\view\AbstractView {
             $section = $this->renderTableauDeBord();
         }if($selector == 'AllCommandes'){
             $section = $this->renderAllCommandes();
+        }if($selector == 'TheCommande'){
+            $section = $this->renderTheCommande();
         }
         return "<header>${header}</header><section>${section}</section><footer>${footer}</footer>";
     }
@@ -122,7 +124,7 @@ class AdminView extends \mf\view\AbstractView {
                 foreach ($lines as $q){
                     $nbArticles=$nbArticles + $q->Quantite;
                 }
-            $resultat=$resultat."<a href=".$router->urlFor('commandes',['id_Commande'=>$prop->id])."><article><p>$prop->Nom_client</p><p>$prop->Tel_client</p><p>$nbArticles Article(s)</p><p>$livre</p><p>$prop->Montant €</p><p class='error'>$paye</p></article></a>"."\n";
+            $resultat=$resultat."<a href=".$router->urlFor('TheCommande',['id'=>$prop->id])."><article><p>$prop->Nom_client</p><p>$prop->Tel_client</p><p>$nbArticles Article(s)</p><p>$livre</p><p>$prop->Montant €</p><p class='error'>$paye</p></article></a>"."\n";
             }
         }
         foreach ($this->data as $prop){
@@ -134,7 +136,7 @@ class AdminView extends \mf\view\AbstractView {
                 foreach ($lines as $q){
                     $nbArticles=$nbArticles + $q->Quantite;
                 }
-                $resultat=$resultat."<a href=".$router->urlFor('commandes',['id_Commande'=>$prop->id])."><article><p>$prop->Nom_client</p><p>$prop->Tel_client</p><p>$nbArticles Article(s)</p><p class='error'>$livre</p><p>$prop->Montant €</p><p class='error'>$paye</p></article></a>"."\n";
+                $resultat=$resultat."<a href=".$router->urlFor('TheCommande',['id'=>$prop->id])."><article><p>$prop->Nom_client</p><p>$prop->Tel_client</p><p>$nbArticles Article(s)</p><p class='error'>$livre</p><p>$prop->Montant €</p><p class='error'>$paye</p></article></a>"."\n";
             }
         }
         foreach ($this->data as $prop){
@@ -146,7 +148,7 @@ class AdminView extends \mf\view\AbstractView {
                 foreach ($lines as $q){
                     $nbArticles=$nbArticles + $q->Quantite;
                 }
-                $resultat=$resultat."<a href=".$router->urlFor('commandes',['id_Commande'=>$prop->id])."><article><p>$prop->Nom_client</p><p>$prop->Tel_client</p><p>$nbArticles Article(s)</p><p>$livre</p><p>$prop->Montant €</p><p>$paye</p></article></a>"."\n";
+                $resultat=$resultat."<a href=".$router->urlFor('TheCommande',['id'=>$prop->id])."><article><p>$prop->Nom_client</p><p>$prop->Tel_client</p><p>$nbArticles Article(s)</p><p>$livre</p><p>$prop->Montant €</p><p>$paye</p></article></a>"."\n";
             }
         }
 
@@ -154,6 +156,102 @@ class AdminView extends \mf\view\AbstractView {
 
     return $resultat."</div>";
     }
+
+
+    public function renderTheCommande()
+    {
+        $router = new \mf\router\Router();
+        foreach ($this->data as $val){
+            $resultat="<h2>Commande n°$val->id par $val->Nom_client</h2>";
+            $resultat=$resultat."<div id='Commande'><aside><span>Coordonées :</span><span>$val->Mail_client</span><span>$val->Tel_client</span></aside>";
+
+            $producteurs=\appAdmin\model\User::select();
+            $ProducteursLines=$producteurs->get();
+            $InfosProducteur=[];
+            $quantiteTotalFull=0;
+
+            foreach ($ProducteursLines as $prod){
+                $quantite = \appAdmin\model\Quantite::where('COMMANDE_ID', '=',$val->id);
+                $lines=$quantite->get();
+                foreach ($lines as $q){
+
+                    $production = \appAdmin\model\Production::where('ID_PRODUIT', '=',$q->PRODUIT_ID);
+                    $productionLignes = $production->get();
+                    $produit = \appAdmin\model\Produits::where('id', '=',$q->PRODUIT_ID);
+                    $produitLine =$produit->get();
+
+
+                        foreach ($productionLignes as $pTion){
+
+//                            if ($prod->id == $pTion->ID_PRODUCTEUR){
+//                                $nbProduitsProducteur++;
+//                                $nbArticlesProducteur=$nbArticlesProducteur+$q->Quantite;
+//                            }
+                            if ($prod->id == $pTion->ID_PRODUCTEUR){
+                                $InfosProducteur['nom']=$prod->Nom;
+
+//                                $resultat=$resultat."<h3>$prod->Nom : $nbProduitsProducteur Produit(s) / $nbArticlesProducteur Article(s) </h3>";
+                                $article=[];
+                                foreach ($produitLine as $p){
+                                    $article['nom']=$p->nom;
+                                    $article['prix']=$p->tarif_unitaire;
+                                    $article['quantite']=$q->Quantite;
+
+                                    $InfosProducteur['articles'][]=$article;
+//                                    $resultat=$resultat.$p->nom."\n<br>";
+                                }
+                            }
+                        }
+
+
+
+//                    $InfosProducteur['nbProduitsProducteur']
+//                    echo $q->PRODUIT_ID;
+//                    echo $q->Quantite;
+                }
+                $quantiteTotal=0;
+                if(!empty($InfosProducteur)){
+                    foreach ($InfosProducteur['articles'] as $articles){
+                       $quantiteTotal= $quantiteTotal+$articles['quantite'];
+
+                    }
+                    $resultat=$resultat."<h3> ".$InfosProducteur['nom']." : ".count($InfosProducteur['articles']) ." Produit(s) / ".$quantiteTotal." Article(s) </h3>";
+                    foreach ($InfosProducteur['articles'] as $articles){
+                        $resultat=$resultat."<article><p>".$articles['nom']."</p><p>X".$articles['quantite']."</p><p>".$articles['quantite']*$articles['prix']." €</p></article>";
+                    }
+
+                }
+                $quantiteTotalFull=$quantiteTotal+$quantiteTotalFull;
+                $InfosProducteur=[];
+            }
+
+
+            $resultat=$resultat."<aside id='Total'><h3>Total</h3><p>X$quantiteTotalFull</p><p>$val->Montant €</p></aside>";
+            if($val->Etat=='livré'){
+                $resultat=$resultat."<div id='valide'><a href=".$router->urlFor('ValidPaiement',['id'=>$val->id]).">Valider le paiement</a></div><svg style='visibility: hidden; position: absolute;' width='0' height='0' xmlns='http://www.w3.org/2000/svg' version='1.1'>
+                    <defs>
+                        <filter id='goo'><feGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur' />    
+                            <feColorMatrix in='blur' mode='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' />
+                            <feComposite in='SourceGraphic' in2='goo' operator='atop'/>
+                        </filter>
+                    </defs>
+                </svg>";
+            }if($val->Etat=='en_cours'){
+                $resultat=$resultat."<div id='valide' ><a href=".$router->urlFor('ValidLivraison',['id'=>$val->id]).">Valider la livraison</a></div><svg style='visibility: hidden; position: absolute;' width='0' height='0' xmlns='http://www.w3.org/2000/svg' version='1.1'>
+                    <defs>
+                        <filter id='goo'><feGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur' />    
+                            <feColorMatrix in='blur' mode='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' />
+                            <feComposite in='SourceGraphic' in2='goo' operator='atop'/>
+                        </filter>
+                    </defs>
+                </svg>";
+            }
+
+        }
+
+        return $resultat."</div>";
+    }
+
     public function renderTableauDeBord(){
         $resultat= "<h2>Tableau de Bord</h2>";
 

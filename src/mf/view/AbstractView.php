@@ -122,6 +122,7 @@ abstract class AbstractView {
 <html lang="fr">
     <head>
         <meta charset="utf-8">
+        
         <title>${title}</title>
 	    ${styles}
     </head>
