@@ -69,10 +69,25 @@ $router->addRoute('ValidPaiement',
     '\appAdmin\control\AdminController',
     'ValidPaiement',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_ADMIN);
+$router->addRoute('modifProduit',
+    '/modifProduit/',
+    '\appAdmin\control\AdminController',
+    'modifProduit',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
+$router->addRoute('ValidmodifProduit',
+    '/ValidmodifProduit/',
+    '\appAdmin\control\AdminController',
+    'ValidmodifProduit',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
 $router->addRoute('logout',
     '/logout/',
     '\appAdmin\control\AdminController',
     'log_out',
+    \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
+$router->addRoute('MesProduits',
+    '/MesProduits/',
+    '\appAdmin\control\AdminController',
+    'viewMesProduits',
     \appAdmin\auth\AdminAuthentification::ACCESS_LEVEL_USER);
 $router->addRoute('commandes',
     '/commandes/',

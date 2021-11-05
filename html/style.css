@@ -12,7 +12,7 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
+article, aside, #MesProduits article, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
@@ -24,7 +24,7 @@ time, mark, audio, video {
 }
 
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
+article, aside, #MesProduits article, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block;
 }
@@ -66,6 +66,52 @@ h2 {
   margin: 2em;
 }
 
+button {
+  border: none;
+}
+
+#valide {
+  padding: 11rem 0;
+  filter: url("#goo");
+  margin: auto;
+}
+#valide :first-child {
+  display: inline-block;
+  text-align: center;
+  background: cadetblue;
+  color: white;
+  padding: 1.18em 1.32em 1.03em;
+  line-height: 1;
+  border-radius: 1em;
+  position: relative;
+  min-width: 8.23em;
+  text-decoration: none;
+  font-size: 1.25rem;
+}
+#valide :first-child:before, #valide :first-child:after {
+  width: 4.4em;
+  height: 2.95em;
+  position: absolute;
+  content: "";
+  display: inline-block;
+  background: cadetblue;
+  border-radius: 50%;
+  transition: transform 1s ease;
+  transform: scale(0);
+  z-index: -1;
+}
+#valide :first-child:before {
+  top: -25%;
+  left: 20%;
+}
+#valide :first-child:after {
+  bottom: -25%;
+  right: 20%;
+}
+#valide :first-child:hover:before, #valide :first-child:hover:after, #valide :first-child:focus:before, #valide :first-child:focus:after {
+  transform: none;
+}
+
 * {
   font-family: "Roboto", sans-serif;
 }
@@ -76,38 +122,65 @@ header {
   align-items: center;
   background: cadetblue;
   padding: 1em 2em;
+  min-height: 4em;
 }
 header nav a {
   margin-left: 1em;
 }
 
 section {
-  height: 87vh;
+  min-height: 87vh;
 }
-section main {
+section .main {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
 }
-section main article {
+section .main form {
+  display: flex;
+  flex-direction: column;
+}
+section .main form label, section .main form input {
+  margin-bottom: 1em;
+}
+section .main form input {
+  padding: 0.5em;
+}
+section .main form h2 {
+  text-align: center;
+}
+section .main form #valide {
+  padding-top: 2em;
+}
+section .main form #valide button {
+  border: none;
+}
+section .main article {
   flex-basis: 150px;
   height: 150px;
-  background-color: cadetblue;
   display: flex;
   justify-content: Center;
   align-items: center;
   margin: 0 4em;
 }
-section main article a {
+section .main article a {
   width: 100%;
   height: 100%;
   display: block;
   text-align: center;
   line-height: 150px;
+  transition: all 0.5s ease;
+  border: cadetblue solid 3px;
+  border-radius: 5px;
+  background: cadetblue;
+  color: white;
 }
-section main article:hover {
-  background: aqua;
+section .main article a:hover, section .main article a:focus {
+  background-color: white;
+  border: cadetblue solid 3px;
+  color: cadetblue;
+  transition: all 0.5s ease;
 }
 section #tableauBordInfo {
   display: flex;
@@ -119,9 +192,11 @@ section #tableauBordInfo article {
   text-align: center;
 }
 section #Producteurs_CA {
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+  padding: 0 2em;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 2em;
+  margin-bottom: 2em;
 }
 section #Producteurs_CA article {
   text-align: center;
@@ -132,7 +207,7 @@ section #Producteurs_CA article img {
 section #ALlCommandes {
   padding: 0 2em;
 }
-section #ALlCommandes aside {
+section #ALlCommandes aside, section #ALlCommandes #MesProduits article, #MesProduits section #ALlCommandes article {
   margin-bottom: 1.5em;
   display: flex;
   justify-content: space-between;
@@ -164,30 +239,30 @@ section #Commande #Total {
 section #Commande #Total h3 {
   margin-left: -1em;
 }
-section #Commande aside {
+section #Commande aside, section #Commande #MesProduits article, #MesProduits section #Commande article {
   display: grid;
   grid-template-columns: 4fr 1.5fr 1fr;
   align-items: center;
 }
-section #Commande aside span {
+section #Commande aside span, section #Commande #MesProduits article span, #MesProduits section #Commande article span {
   line-height: 48px;
 }
-section #Commande aside span img {
+section #Commande aside span img, section #Commande #MesProduits article span img, #MesProduits section #Commande article span img {
   margin-right: 1em;
 }
-section #Commande aside span:nth-child(1) {
+section #Commande aside span:nth-child(1), section #Commande #MesProduits article span:nth-child(1), #MesProduits section #Commande article span:nth-child(1) {
   font-weight: bolder;
 }
-section #Commande aside span:nth-child(2):before {
+section #Commande aside span:nth-child(2):before, section #Commande #MesProduits article span:nth-child(2):before, #MesProduits section #Commande article span:nth-child(2):before {
   content: url("https://valentinbardet.fr/atelier/html/icons/email.png");
   position: relative;
   left: -1em;
   top: 10px;
 }
-section #Commande aside span:nth-child(3) {
+section #Commande aside span:nth-child(3), section #Commande #MesProduits article span:nth-child(3), #MesProduits section #Commande article span:nth-child(3) {
   justify-self: end;
 }
-section #Commande aside span:nth-child(3):before {
+section #Commande aside span:nth-child(3):before, section #Commande #MesProduits article span:nth-child(3):before, #MesProduits section #Commande article span:nth-child(3):before {
   content: url("https://valentinbardet.fr/atelier/html/icons/phone.png");
   position: relative;
   left: -1em;
@@ -207,49 +282,40 @@ section #Commande article {
 section #Commande article p:nth-child(1) {
   text-transform: capitalize;
 }
-section #Commande #valide {
-  padding: 11rem 0;
-  filter: url("#goo");
-  margin: auto;
+
+#MesProduits {
+  padding: 0 2em;
 }
-section #Commande #valide a {
-  display: inline-block;
-  text-align: center;
+#MesProduits aside, #MesProduits article {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 1em;
+  padding: 1em;
+}
+#MesProduits article {
+  border: solid 2px cadetblue;
+  border-radius: 5px;
+  margin-bottom: 2em;
+}
+#MesProduits article input, #MesProduits article select, #MesProduits article option, #MesProduits article button {
+  font-size: 1rem;
+  padding: 0 1rem;
+}
+#MesProduits article a, #MesProduits article button {
+  transition: all 0.5s ease;
+  border: cadetblue solid 3px;
+  border-radius: 5px;
   background: cadetblue;
   color: white;
-  font-weight: bold;
-  padding: 1.18em 1.32em 1.03em;
-  line-height: 1;
-  border-radius: 1em;
-  position: relative;
-  min-width: 8.23em;
-  text-decoration: none;
-  font-size: 1.25rem;
+  align-self: center;
+  text-align: center;
+  padding: 1em;
 }
-section #Commande #valide a:before,
-section #Commande #valide a:after {
-  width: 4.4em;
-  height: 2.95em;
-  position: absolute;
-  content: "";
-  display: inline-block;
-  background: cadetblue;
-  border-radius: 50%;
-  transition: transform 1s ease;
-  transform: scale(0);
-  z-index: -1;
-}
-section #Commande #valide a:before {
-  top: -25%;
-  left: 20%;
-}
-section #Commande #valide a:after {
-  bottom: -25%;
-  right: 20%;
-}
-section #Commande #valide a:hover:before,
-section #Commande #valide a:hover:after {
-  transform: none;
+#MesProduits article a:hover, #MesProduits article a:focus, #MesProduits article button:hover, #MesProduits article button:focus {
+  background-color: white;
+  border: cadetblue solid 3px;
+  color: cadetblue;
+  transition: all 0.5s ease;
 }
 
 footer {
@@ -258,6 +324,46 @@ footer {
   align-items: center;
   background: cadetblue;
   padding: 1em;
+}
+
+@media screen and (max-width: 1140px) {
+  section > #Producteurs_CA {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media screen and (max-width: 1020px) {
+  section > #Commande aside, section > #Commande #MesProduits article, #MesProduits section > #Commande article {
+    grid-template-columns: 3fr 2fr 1fr;
+  }
+}
+@media screen and (max-width: 795px) {
+  section > #Commande aside, section > #Commande #MesProduits article, #MesProduits section > #Commande article {
+    grid-template-columns: 1.2fr 2.6fr 1.6fr;
+  }
+}
+@media screen and (max-width: 670px) {
+  section > #ALlCommandes article {
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1em;
+  }
+}
+@media screen and (max-width: 579px) {
+  section .main {
+    flex-direction: column;
+  }
+  section .main article {
+    width: 150px;
+    margin-bottom: 2em;
+  }
+  section > #Producteurs_CA {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  section > #tableauBordInfo {
+    flex-direction: column;
+  }
+  section > #tableauBordInfo article {
+    margin: 0 0 2em 0;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

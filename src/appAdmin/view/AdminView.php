@@ -21,11 +21,11 @@ class AdminView extends \mf\view\AbstractView {
         if (!empty($_SESSION['user_login'])){//menu connecté
 
             $router = new \mf\router\Router();
-            $res="<nav><a href='".$router->urlFor('logout')."'><img src='https://valentinbardet.fr/atelier/html/icons/logout.png'></a>";
+            $res="<nav><a href='".$router->urlFor('logout')."'><img src='https://149.91.80.75/atelier/html/icons/logout.png'></a>";
             if($_SESSION['access_level']==1){
-                $res=$res."<a href='".$router->urlFor('homeProducteur')."'><img src='https://valentinbardet.fr/atelier/html/icons/home.png'></a></nav>";
+                $res=$res."<a href='".$router->urlFor('homeProducteur')."'><img src='https://149.91.80.75/atelier/html/icons/home.png'></a></nav>";
             }if($_SESSION['access_level']==2){
-                $res=$res."<a href='".$router->urlFor('homeGerant')."'><img src='https://valentinbardet.fr/atelier/html/icons/home.png'></a></nav>";
+                $res=$res."<a href='".$router->urlFor('homeGerant')."'><img src='https://149.91.80.75/atelier/html/icons/home.png'></a></nav>";
             }
             return $title.$res;
         }
@@ -69,18 +69,32 @@ class AdminView extends \mf\view\AbstractView {
             $section = $this->renderAllCommandes();
         }if($selector == 'TheCommande'){
             $section = $this->renderTheCommande();
+        }if($selector == 'MesProduits'){
+            $section = $this->renderMesProduits();
+        }if($selector == 'modifProduit'){
+            $section = $this->rendermodifProduit();
         }
         return "<header>${header}</header><section>${section}</section><footer>${footer}</footer>";
     }
 
     public function renderLogin(){
         $router = new \mf\router\Router();
-        $resultat="<div>";
+        $resultat="<div class='main'>";
         $resultat=$resultat."<form method='post' action=".$router->urlFor('checklogin').">
-        <input type='text' placeholder='Username' name='user_name' id='user_name'></br></br>
-        <input type='password' placeholder='Password' name='password' id='password'></br></br>
-        <button type='submit'>Login</button>
-        </form>";
+        <h2>Connectez-vous</h2>
+        <label for='user_name'>Email</label>
+        <input type='text' name='user_name' id='user_name'><br><br>
+        <label for='password'>Mot de passe</label>
+        <input type='password' name='password' id='password'><br><br>
+        <div id='valide'><button type='submit'>Connexion</button></div>
+        </form><svg style='visibility: hidden; position: absolute;' width='0' height='0' xmlns='http://www.w3.org/2000/svg' version='1.1'>
+                    <defs>
+                        <filter id='goo'><feGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur' />    
+                            <feColorMatrix in='blur' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' />
+                            <feComposite in='SourceGraphic' in2='goo' operator='atop'/>
+                        </filter>
+                    </defs>
+                </svg></div>";
 
         return $resultat;
     }
@@ -91,17 +105,77 @@ class AdminView extends \mf\view\AbstractView {
         $router = new \mf\router\Router();
         foreach ($this->data as $usr){
             $resultat= "<h2>Bienvenue $usr->Nom</h2>";
-            $resultat=$resultat."<article><a href=".$router->urlFor('commandes',['id_producteur'=>$usr->id]).">Mes commandes</a></article>";
+            $resultat=$resultat."<div class='main'><article><a href=".$router->urlFor('commandes',['id_producteur'=>$usr->id]).">Mes commandes</a></article><article><a href=".$router->urlFor('MesProduits').">Mes produits</a></article></div>";
         }
 
 
         return $resultat;
     }
+    public function renderMesProduits(){
+        $router = new \mf\router\Router();
+        foreach ($this->data as $usr){
+            $resultat= "<h2>Mes Produits</h2><div id='MesProduits'>";
+            $production= \appAdmin\model\Production::where('ID_PRODUCTEUR','=',$usr->id);
+            $ligneProduction=$production->get();
+            $resultat=$resultat."<aside><h3>Nom</h3><h3>Prix</h3><h3>Description</h3><h3>Quantité</h3><h3>Catégorie</h3></aside>";
+            foreach ($ligneProduction as $productionL){
+                $produitBd = \appAdmin\model\Produits::where('id','=',$productionL->ID_PRODUIT);
+                $produits=$produitBd->get();
+                foreach ($produits as $produitL){
+                    $resultat=$resultat."<article><p>$produitL->nom</p><p>$produitL->tarif_unitaire €</p><p>$produitL->description</p><p>$produitL->Quantite</p>";
+                    $categorie = \appAdmin\model\Categorie::where('id','=',$produitL->ID_categorie)->first();
+                    $resultat=$resultat."<p>$categorie->Nom</p><a href=".$router->urlFor('modifProduit',['id'=>$produitL->id]).">Modifier</a></article>";
+                }
+            }
+        }
+
+
+        return $resultat."</div>";
+    }
+    public function rendermodifProduit(){
+        $router = new \mf\router\Router();
+
+        foreach ($this->data as $prod){
+            $resultat= "<h2>Modifier $prod->nom</h2><div id='MesProduits'>";
+            $resultat=$resultat."<form method='post' action=".$router->urlFor('ValidmodifProduit').">
+        <aside><label for='nom'>Nom</label><label for='prix'>Prix</label><label for='description'>Description</label><label for='quantite'>Quantité</label><label for='categorie'>Catégorie</label></aside>
+        <article>
+        <input type='hidden' name='id' id='id' value=".$prod->id.">
+        <input type='text' name='nom' id='nom' value=".$prod->nom.">
+        <input type='text' name='prix' id='prix' value=".$prod->tarif_unitaire.">
+        <textarea type='text' rows='3' name='description' id='description'>$prod->description</textarea>
+        <input type='text' name='quantite' id='quantite' value=".$prod->Quantite.">
+        <select name='categorie' id='categorie'>";
+        $categories = \appAdmin\model\Categorie::select();
+        $categoriesL=$categories->get();
+        foreach ($categoriesL as $res){
+            if ($res->id == $prod->ID_categorie){
+                $resultat=$resultat."<option selected value='$res->id'>$res->Nom</option>";
+            }else{
+                $resultat=$resultat."<option value='$res->id'>$res->Nom</option>";
+            }
+
+        }
+        $resultat=$resultat."</select>
+        <button type='submit'>Valider la modification</button></article>
+        </form><svg style='visibility: hidden; position: absolute;' width='0' height='0' xmlns='http://www.w3.org/2000/svg' version='1.1'>
+                    <defs>
+                        <filter id='goo'><feGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur' />    
+                            <feColorMatrix in='blur' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' />
+                            <feComposite in='SourceGraphic' in2='goo' operator='atop'/>
+                        </filter>
+                    </defs>
+                </svg>";
+        }
+
+
+        return $resultat."</div>";
+    }
     public function renderHomeGerant(){
     $router = new \mf\router\Router();
         $resultat= "<h2>Bienvenue Administrateur</h2>";
-        $resultat=$resultat."<main><article><a href=".$router->urlFor('AllCommandes').">Commandes</a></article>";
-        $resultat=$resultat."<article><a href=".$router->urlFor('TableauDeBord').">Tableau de Bord</a></article></main>";
+        $resultat=$resultat."<div class='main'><article><a href=".$router->urlFor('AllCommandes').">Commandes</a></article>";
+        $resultat=$resultat."<article><a href=".$router->urlFor('TableauDeBord').">Tableau de Bord</a></article></div>";
 
     return $resultat;
     }
@@ -174,23 +248,13 @@ class AdminView extends \mf\view\AbstractView {
                 $quantite = \appAdmin\model\Quantite::where('COMMANDE_ID', '=',$val->id);
                 $lines=$quantite->get();
                 foreach ($lines as $q){
-
                     $production = \appAdmin\model\Production::where('ID_PRODUIT', '=',$q->PRODUIT_ID);
                     $productionLignes = $production->get();
                     $produit = \appAdmin\model\Produits::where('id', '=',$q->PRODUIT_ID);
                     $produitLine =$produit->get();
-
-
                         foreach ($productionLignes as $pTion){
-
-//                            if ($prod->id == $pTion->ID_PRODUCTEUR){
-//                                $nbProduitsProducteur++;
-//                                $nbArticlesProducteur=$nbArticlesProducteur+$q->Quantite;
-//                            }
                             if ($prod->id == $pTion->ID_PRODUCTEUR){
                                 $InfosProducteur['nom']=$prod->Nom;
-
-//                                $resultat=$resultat."<h3>$prod->Nom : $nbProduitsProducteur Produit(s) / $nbArticlesProducteur Article(s) </h3>";
                                 $article=[];
                                 foreach ($produitLine as $p){
                                     $article['nom']=$p->nom;
@@ -198,16 +262,9 @@ class AdminView extends \mf\view\AbstractView {
                                     $article['quantite']=$q->Quantite;
 
                                     $InfosProducteur['articles'][]=$article;
-//                                    $resultat=$resultat.$p->nom."\n<br>";
                                 }
                             }
                         }
-
-
-
-//                    $InfosProducteur['nbProduitsProducteur']
-//                    echo $q->PRODUIT_ID;
-//                    echo $q->Quantite;
                 }
                 $quantiteTotal=0;
                 if(!empty($InfosProducteur)){
@@ -231,7 +288,7 @@ class AdminView extends \mf\view\AbstractView {
                 $resultat=$resultat."<div id='valide'><a href=".$router->urlFor('ValidPaiement',['id'=>$val->id]).">Valider le paiement</a></div><svg style='visibility: hidden; position: absolute;' width='0' height='0' xmlns='http://www.w3.org/2000/svg' version='1.1'>
                     <defs>
                         <filter id='goo'><feGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur' />    
-                            <feColorMatrix in='blur' mode='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' />
+                            <feColorMatrix in='blur' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' />
                             <feComposite in='SourceGraphic' in2='goo' operator='atop'/>
                         </filter>
                     </defs>
@@ -240,7 +297,7 @@ class AdminView extends \mf\view\AbstractView {
                 $resultat=$resultat."<div id='valide' ><a href=".$router->urlFor('ValidLivraison',['id'=>$val->id]).">Valider la livraison</a></div><svg style='visibility: hidden; position: absolute;' width='0' height='0' xmlns='http://www.w3.org/2000/svg' version='1.1'>
                     <defs>
                         <filter id='goo'><feGaussianBlur in='SourceGraphic' stdDeviation='10' result='blur' />    
-                            <feColorMatrix in='blur' mode='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' />
+                            <feColorMatrix in='blur' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='goo' />
                             <feComposite in='SourceGraphic' in2='goo' operator='atop'/>
                         </filter>
                     </defs>
@@ -265,9 +322,9 @@ class AdminView extends \mf\view\AbstractView {
         }
         $UniqueUser = array_unique($user);
         $nbUser=count($UniqueUser);
-        $resultat=$resultat."<div id='tableauBordInfo'><article><img src='https://valentinbardet.fr/atelier/html/icons/customer.png' alt='Client'><h3>$nbUser Clients</h3></article>";
-        $resultat=$resultat."<article><img src='https://valentinbardet.fr/atelier/html/icons/orders.png' alt='Commandes'><h3>$com Commandes</h3></article>";
-        $resultat=$resultat."<article><img src='https://valentinbardet.fr/atelier/html/icons/money.png' alt='Money'><h3>$ca € De CA </h3></article></div>";
+        $resultat=$resultat."<div id='tableauBordInfo'><article><img src='https://149.91.80.75/atelier/html/icons/customer.png' alt='Client'><h3>$nbUser Clients</h3></article>";
+        $resultat=$resultat."<article><img src='https://149.91.80.75/atelier/html/icons/orders.png' alt='Commandes'><h3>$com Commandes</h3></article>";
+        $resultat=$resultat."<article><img src='https://149.91.80.75/atelier/html/icons/money.png' alt='Money'><h3>$ca € De CA </h3></article></div>";
         $resultat=$resultat."<h2>Chiffre d'affaire par Producteur</h2>";
         $commandes = \appAdmin\model\Commande::select();
         $lignes=$commandes->get();
@@ -290,7 +347,6 @@ class AdminView extends \mf\view\AbstractView {
                 $tabproduits =$produit->get();
 
                 foreach ($tabproduits as $p){
-                    $p->tarif_unitaire  ;
                     foreach ($tabQuantite as $q) {
                         $price=$price+($p->tarif_unitaire*$q->Quantite);
                     }
@@ -305,7 +361,6 @@ class AdminView extends \mf\view\AbstractView {
         $router = new \mf\router\Router();
         $resultat="<div>";
         $resultat= $resultat."Commandes</div>";
-//      $resultat =$this->data->produit;
         return $resultat;
     }
 
