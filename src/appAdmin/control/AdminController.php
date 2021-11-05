@@ -10,26 +10,26 @@ class AdminController extends \mf\control\AbstractController {
     }
     public function viewLogin(){
         $vue= new \appAdmin\view\AdminView(null);
-        $vue->setAppTitle("LeHangar Gestion - Connexion");
+        $vue->setAppTitle("LeHangar.local Gestion - Connexion");
         return $vue->render('Login');
     }
     public function viewProducteurHome(){
         $user = \appAdmin\model\User::where('Mail','=',$_SESSION['user_login']);
         $ligne = $user->get();
         $vue= new \appAdmin\view\AdminView($ligne);
-        $vue->setAppTitle("LeHangar Gestion - Home");
+        $vue->setAppTitle("LeHangar.local Gestion - Home");
         return $vue->render('HomeProducteur');
     }
     public function viewGerantHome(){
         $vue= new \appAdmin\view\AdminView(null);
-        $vue->setAppTitle("LeHangar Gestion - Home");
+        $vue->setAppTitle("LeHangar.local Gestion - Home");
         return $vue->render('HomeGerant');
     }
     public function viewAllCommandes(){
         $commandes = \appAdmin\model\Commande::select();
         $lignes = $commandes->get();
         $vue= new \appAdmin\view\AdminView($lignes);
-        $vue->setAppTitle("LeHangar Gestion - Commandes");
+        $vue->setAppTitle("LeHangar.local Gestion - Commandes");
         return $vue->render('AllCommandes');
 
     }
@@ -38,14 +38,14 @@ class AdminController extends \mf\control\AbstractController {
         $commande = \appAdmin\model\Commande::where('id','=',$commande_id);;
         $lignes=$commande->get();
         $vue= new \appAdmin\view\AdminView($lignes);
-        $vue->setAppTitle("LeHangar Gestion - Commande n°$commande_id");
+        $vue->setAppTitle("LeHangar.local Gestion - Commande n°$commande_id");
         return $vue->render('TheCommande');
     }
     public function viewTableauDeBord(){
         $commandes = \appAdmin\model\Commande::select();
         $lignes=$commandes->get();
         $vue= new \appAdmin\view\AdminView($lignes);
-        $vue->setAppTitle("LeHangar Gestion - Tableau de Bord");
+        $vue->setAppTitle("LeHangar.local Gestion - Tableau de Bord");
         return $vue->render('TableauDeBord');
     }
 
@@ -65,6 +65,7 @@ class AdminController extends \mf\control\AbstractController {
 
     public function viewCommandes(){
         $vues=new \appAdmin\view\AdminView(null);
+        $vues->setAppTitle("LeHangar.local Gestion - Mes commandes");
         return $vues->render('Commandes');
 
     }
@@ -88,7 +89,8 @@ class AdminController extends \mf\control\AbstractController {
     $usermail=$_SESSION['user_login'];
     $user=\appAdmin\model\User::where('Mail','=',$usermail);
     $userL=$user->get();
-    $vue= new \appAdmin\view\AdminView($userL);
+        $vue= new \appAdmin\view\AdminView($userL);
+        $vue->setAppTitle("LeHangar.local Gestion - Nouveau Produit");
     return $vue->render('NewProduit');
     }
     public function ValidNewProduit(){
@@ -118,6 +120,7 @@ class AdminController extends \mf\control\AbstractController {
         $produit=\appAdmin\model\Produits::where('id','=',$produitID);
         $produitLine=$produit->get();
         $vue= new \appAdmin\view\AdminView($produitLine);
+        $vue->setAppTitle("LeHangar.local Gestion - Modifier produit n°$produitID");
         return $vue->render('modifProduit');
     }
     public function ValidmodifProduit(){
@@ -142,7 +145,7 @@ class AdminController extends \mf\control\AbstractController {
         $userL=\appAdmin\model\User::where('Mail','=',$mail);
         $user=$userL->get() ;
         $vue= new \appAdmin\view\AdminView($user);
-        $vue->setAppTitle("LeHangar Gestion - Mes Produits");
+        $vue->setAppTitle("LeHangar.local Gestion - Mes Produits");
         return $vue->render('MesProduits');
 
     }

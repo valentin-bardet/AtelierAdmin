@@ -17,7 +17,7 @@ class AdminView extends \mf\view\AbstractView {
      *  Retourne le fragment HTML de l'entête (unique pour toutes les vues)
      */ 
     public function renderHeader(){
-        $title="<h1>LeHangar - Gestion</h1>";
+        $title="<h1>LeHangar.local - Gestion</h1>";
         if (!empty($_SESSION['user_login'])){//menu connecté
 
             $router = new \mf\router\Router();
